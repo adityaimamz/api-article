@@ -18,7 +18,6 @@ exports.getArticle = async (req, res) => {
       });
     }
     return res.status(200).json({
-      status: "success",
       data: article, // Mengembalikan data artikel jika berhasil ditemukan
     });
   } catch (error) {
@@ -33,16 +32,15 @@ exports.getArticle = async (req, res) => {
 
 exports.getAllArticle = async (req, res) => {
   try {
-    const { search, limit , page } = req.query;
+    const { search, limit, page } = req.query;
 
     let listArticle = "";
 
     if (search || limit || page) {
-       const pageData = page * 1 || 1;
-       const limitData = limit * 1 || 5;
-       const offset = (pageData - 1) * limitData;
-       const searchData = search || "";
-
+      const pageData = page * 1 || 1;
+      const limitData = limit * 1 || 5;
+      const offset = (pageData - 1) * limitData;
+      const searchData = search || "";
 
       const articles = await Article.findAndCountAll({
         limit: limitData,
@@ -61,7 +59,6 @@ exports.getAllArticle = async (req, res) => {
       listArticle = articles;
     }
     res.status(200).json({
-      status: "success",
       data: listArticle, // Mengembalikan data semua artikel
     });
   } catch (error) {
@@ -97,7 +94,6 @@ exports.storeArticle = async (req, res) => {
     });
 
     return res.status(200).json({
-      status: "success",
       data: newArticle, // Mengembalikan data artikel yang baru dibuat
     });
   } catch (error) {
@@ -218,7 +214,6 @@ exports.destroyArticle = async (req, res) => {
       },
     });
     return res.status(200).json({
-      status: "success",
       message: "Artikel berhasil dihapus", // Mengembalikan pesan sukses setelah menghapus artikel
     });
   } catch (error) {

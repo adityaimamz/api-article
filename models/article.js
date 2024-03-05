@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
     /**
@@ -10,62 +8,75 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Article.belongsTo(models.Category, { foreignKey: "categoryId" });
     }
   }
-  Article.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: {
-        args: true,
-        msg: 'title must be unique'
+  Article.init(
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          args: true,
+          msg: "title must be unique",
+        },
+        validate: {
+          notNull: {
+            msg: "title cannot be empty",
+          },
+        },
       },
-      validate: {
-        notNull: {
-          msg: 'title cannot be empty'
-        }
-      }
-    },
-    slug: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: {
-        args: true,
-        msg: 'slug must be unique'
+      slug: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          args: true,
+          msg: "slug must be unique",
+        },
+        validate: {
+          notNull: {
+            msg: "slug cannot be empty",
+          },
+        },
       },
-      validate: {
-        notNull: {
-          msg: 'slug cannot be empty'
-        }
+      desc: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "desc cannot be empty",
+          },
+        },
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "image cannot be empty",
+          },
+        },
+      },
+      categoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "categoryId cannot be empty",
+          },
+          async isExists(value) {
+            const category = await Category.findByPk(value);
+            if (!category) {
+              throw new Error("Category not found");
+            }
+          },
+        },
       },
     },
-    desc: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'desc cannot be empty'
-        }
-      }
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'image cannot be empty'
-        }
-      }
+    {
+      sequelize,
+      modelName: "Article",
     }
-  }, {
-    hooks: {
-      afterValidate: (article, options) => {
-        article.slug = article.title.replace(/\s+/g, '-').toLowerCase();
-      }
-    },
-    sequelize,
-    modelName: 'Article',
-  });
+  );
   return Article;
 };
