@@ -72,7 +72,7 @@ exports.getAllArticle = async (req, res) => {
 // Fungsi untuk menyimpan artikel baru
 exports.storeArticle = async (req, res) => {
   try {
-    let { title, desc } = req.body;
+    let { title, desc , categoryId } = req.body;
 
     const file = req.file;
     if (!file) {
@@ -90,6 +90,7 @@ exports.storeArticle = async (req, res) => {
       title,
       slug,
       desc,
+      categoryId,
       image: pathFile,
     });
 

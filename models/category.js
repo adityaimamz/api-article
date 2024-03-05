@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: {
-          args: true,
-          msg: 'Category already exists'
-        },
         validate: {
           notNull: {
             msg: 'Category name is required'

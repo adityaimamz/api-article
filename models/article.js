@@ -62,11 +62,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {
-            msg: "categoryId cannot be empty",
+            msg: "inputan data categoryId product tidak boleh kosong",
           },
-          async isExists(value) {
-            const category = await Category.findByPk(value);
-            if (!category) {
+          async isExist(value) {
+            const el = await sequelize.models.Category.findByPk(value);
+            if (!el) {
               throw new Error("Category not found");
             }
           },
